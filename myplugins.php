@@ -1,4 +1,4 @@
-<?php // (C) Copyright Bobbing Wide 2015, 2016
+<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019
 
 /**
  * Syntax: oikwp myplugins.php [pluginlist]
@@ -18,10 +18,7 @@ require_once( ABSPATH . "wp-admin/includes/plugin-install.php" );
 oik_require( "libs/bobbfunc.php" );
 oik_require( "includes/oik-remote.inc" );
 
-oik_require( "class-wp-org-downloads.php", "play" );
-//oik_require( "class-object-sorter.php", "play" );
-//oik_require( "class-object.php", "play" );
-//oik_require( "class-object-grouper.php", "play" );
+oik_require( "class-wp-org-downloads.php", "wp-top12" );
 
 $wpod = new WP_org_downloads();
 
@@ -55,11 +52,12 @@ function query_my_plugin_list() {
 function query_my_plugins( $wpod, $plugins ) {
 	echo "There are: " . count( $plugins ) . PHP_EOL;
 	foreach ( $plugins as $plugin ) {
-		$wpod->get_download( $plugin ); 
+		$wpod->get_download( $plugin );
 		$count = $wpod->get_download_count();
-		$version = $wpod->response->version ; // get_version();
-		$tested = $wpod->response->tested; // get_tested();
-		$requires = $wpod->response->requires; // _get_requires();
-		echo "$plugin,$count,$version,$tested,$requires" . PHP_EOL;
+		$version = $wpod->response->meta->version ; // get_version();
+		$tested = $wpod->response->meta->tested; // get_tested();
+		$requires = $wpod->response->meta->requires; // _get_requires();
+		$active = $wpod->response->meta->active_installs;
+		echo "$plugin,$count,$version,$tested,$requires,$active" . PHP_EOL;
 	}
 }
