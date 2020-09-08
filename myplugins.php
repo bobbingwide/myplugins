@@ -1,4 +1,4 @@
-<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019
+<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019, 2020
 
 /**
  * Syntax: oikwp myplugins.php [pluginlist]
@@ -37,7 +37,8 @@ query_my_plugins( $wpod, $plugins_array );
 function query_my_plugin_list() {
 	$plugins = oik_batch_query_value_from_argv( 1, null ); 
 	if ( !$plugins ) {
-		$plugins = "oik,oik-nivo-slider,oik-privacy-policy,cookie-cat,bbboing,uk-tides,oik-css,oik-batchmove,oik-read-more,oik-weightcountry-shipping,oik-bwtrace,allow-reinstalls,oik-weight-zone-shipping";
+		$plugins = "oik,oik-nivo-slider,oik-privacy-policy,cookie-cat,bbboing,uk-tides,oik-css,";
+		$plugins .= "oik-batchmove,oik-read-more,oik-weightcountry-shipping,oik-bwtrace,allow-reinstalls,oik-weight-zone-shipping,sb-children-block";
 	}
 	$plugins_array = bw_as_array( $plugins );
 	return( $plugins_array );
@@ -52,12 +53,15 @@ function query_my_plugin_list() {
 function query_my_plugins( $wpod, $plugins ) {
 	echo "There are: " . count( $plugins ) . PHP_EOL;
 	foreach ( $plugins as $plugin ) {
-		$wpod->get_download( $plugin );
-		$count = $wpod->get_download_count();
-		$version = $wpod->response->meta->version ; // get_version();
-		$tested = $wpod->response->meta->tested; // get_tested();
-		$requires = $wpod->response->meta->requires; // _get_requires();
-		$active = $wpod->response->meta->active_installs;
-		echo "$plugin,$count,$version,$tested,$requires,$active" . PHP_EOL;
+		if ( $wpod->get_download( $plugin ) ) {
+			$count = $wpod->get_download_count();
+			$version  = $wpod->response->meta->version; // get_version();
+			$tested   = $wpod->response->meta->tested; // get_tested();
+			$requires = $wpod->response->meta->requires; // _get_requires();
+			$active   = $wpod->response->meta->active_installs;
+			echo "$plugin,$count,$version,$tested,$requires,$active" . PHP_EOL;
+		} else {
+			echo "$plugin,0,not found" . PHP_EOL;
+		}
 	}
 }
