@@ -23,7 +23,16 @@ oik_require( "class-wp-org-downloads.php", "wp-top12" );
 $wpod = new WP_org_downloads();
 
 $plugins_array = query_my_plugin_list(); 																		 
-query_my_plugins( $wpod, $plugins_array );
+$count_array = query_my_plugins( $wpod, $plugins_array );
+
+$line = count_array_to_csv( $count_array );
+//prepend_csv( 'myplugins.csv', $line);
+$heading = get_heading();
+echo $heading;
+append_csv( 'myplugins.csv', $heading );
+append_csv( 'myplugins.csv', $line );
+
+
 
 
 /**
@@ -51,6 +60,7 @@ function query_my_plugin_list() {
  * @param array $plugins array of plugins
  */
 function query_my_plugins( $wpod, $plugins ) {
+	$count_array = [];
 	echo "There are: " . count( $plugins ) . PHP_EOL;
 	foreach ( $plugins as $plugin ) {
 		if ( $wpod->get_download( $plugin ) ) {
@@ -63,5 +73,102 @@ function query_my_plugins( $wpod, $plugins ) {
 		} else {
 			echo "$plugin,0,not found" . PHP_EOL;
 		}
+		$count_array[ $plugin] = $count;
+	}
+	return $count_array;
+}
+
+function count_array_to_csv( $count_array, $real=true ) {
+	$sum = array_sum( $count_array );
+	//echo $sum;
+	$real_or_est = $real ? "real" : "est.";
+	array_unshift( $count_array, bw_format_date(), $sum, $real_or_est );
+	$line = implode( ',', $count_array );
+	$line .= PHP_EOL;
+	return $line;
+}
+
+
+function dummy_query_my_plugins() {
+	$count_array=[];
+	$count_array[ 'oik' ]=166065;
+	$count_array[ 'oik-nivo-slider' ]=91246;
+	$count_array[ 'oik-privacy-policy' ]=60314;
+	$count_array[ 'cookie-cat' ]=26647;
+	$count_array[ 'bbboing' ]=1482;
+	$count_array[ 'uk-tides' ]=3713;
+	$count_array[ 'oik-css' ]=1778;
+	$count_array[ 'oik-batchmove' ]=3718;
+	$count_array[ 'oik-read-more' ]=3604;
+	$count_array[ 'oik-weightcountry-shipping' ]=46291;
+	$count_array[ 'oik-bwtrace' ]=1630;
+	$count_array[ 'allow-reinstalls' ]=1579;
+	$count_array[ 'oik-weight-zone-shipping' ]=9976;
+	$count_array[ 'sb-children-block' ]=107;
+
+	return $count_array;
+}
+
+/**
+ * Prepends the line to the top of the CSV file, after the heading line.
+ *
+ * @param $file
+ * @param $line
+ */
+function prepend_csv( $file, $line ) {
+	echo "Prepending to: $file";
+	echo PHP_EOL;
+	echo $line;
+	echo PHP_EOL;
+	gob( 'to be completed');
+
+}
+
+function append_csv( $file, $line ) {
+	if ( line_not_already_present( $file, $line ) ) {
+		file_put_contents( $file, $line, FILE_APPEND );
+	} else {
+		echo "Not appending to $file";
+		echo PHP_EOL;
 	}
 }
+
+/**
+ * Determines if the line is not already present in the file.
+ *
+ * @param $file
+ * @param $line
+ *
+ * @return bool
+ */
+function line_not_already_present( $file, $line ) {
+	$not_already_present = !file_exists( $file );
+	if ( !$not_already_present ) {
+		$contents = file( $file );
+		$already_present = array_search( $line, $contents);
+		if ( false === $already_present ) {
+			echo "Not already present";
+			$not_already_present = true;
+
+		} else {
+			echo "Already present at " . $already_present;
+			$not_already_present = false;
+		}
+	}
+
+	return $not_already_present;
+}
+
+function get_heading() {
+	$heading_array = array_keys( dummy_query_my_plugins() );
+	//print_r( $heading_array );
+	array_unshift( $heading_array, 'Date', 'Real?', 'Total');
+	$line = implode( ',', $heading_array );
+	$line .= PHP_EOL;
+	return $line;
+}
+
+
+
+
+
