@@ -4,7 +4,8 @@
  * Syntax: oikwp myplugins.php [pluginlist]
  * 
  * Count the downloads of my plugins from wordpress.org for the given plugins
- * 
+ * and keep the history in summary .csv files.
+ *
  * Run this daily! 
  * 
  * {@link https://dd32.id.au/projects/wordpressorg-plugin-information-api-docs}
@@ -29,8 +30,8 @@ $line = count_array_to_csv( $count_array );
 //prepend_csv( 'myplugins.csv', $line);
 $heading = get_heading();
 echo $heading;
-append_csv( 'myplugins.csv', $heading );
-append_csv( 'myplugins.csv', $line );
+append_csv( 'myplugins-asc.csv', $heading );
+append_csv( 'myplugins-asc.csv', $line );
 
 
 
@@ -162,7 +163,7 @@ function line_not_already_present( $file, $line ) {
 function get_heading() {
 	$heading_array = array_keys( dummy_query_my_plugins() );
 	//print_r( $heading_array );
-	array_unshift( $heading_array, 'Date', 'Real?', 'Total');
+	array_unshift( $heading_array, 'Date', 'Total', 'Real?');
 	$line = implode( ',', $heading_array );
 	$line .= PHP_EOL;
 	return $line;
