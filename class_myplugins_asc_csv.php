@@ -42,6 +42,10 @@ class myplugins_asc_csv {
 		}
 	}
 
+	/**
+	 *
+	 */
+
 	function estimate_first_of_each_month() {
 		$this->csv_dates_with_new_esimates = [];
 		reset( $this->csv_dates );
@@ -55,7 +59,11 @@ class myplugins_asc_csv {
 		foreach ( $this->csv_dates as $csv_date => $myplugins ) {
 			echo $csv_date;
 			if ( $csv_date !== 'Date' ) {
+				if ( $csv_date === $next_month ) {
+					$next_month = $this->next_month( $next_month );
+				}
 				while ( $csv_date > $next_month ) {
+					echo "Estimating for $next_month, CSV date: $csv_date" . PHP_EOL;
 					$this->csv_dates_with_new_estimates[ $next_month ]=$this->estimate( $next_month, $previous_myplugins, $myplugins );
 					$next_month                                       =$this->next_month( $next_month );
 
@@ -70,6 +78,7 @@ class myplugins_asc_csv {
 
 				}
 			}
+			
 			$this->csv_dates_with_new_estimates[ $csv_date ] = $myplugins;
 			if ( $myplugins->real === 'real' ) {
 				$previous_myplugins = $myplugins;
@@ -106,22 +115,19 @@ class myplugins_asc_csv {
 	}
 
 	/**
-	 * Writes the csv_dates_with_new_estimates to myplugins-asc.csv
-	 *
+	 * Writes the csv_dates_with_new_estimates to myplugins-est.csv
 	 */
 	function write() {
 		echo count( $this->csv_dates_with_new_estimates);
 		$this->filename = 'myplugins-est.csv';
 		echo "Writing output to:" .  $this->filename;
+		echo PHP_EOL;
+		$output = null;
 		foreach ( $this->csv_dates_with_new_estimates as $date => $myplugins ) {
-			print_r( $myplugins );
-			gob();
+			$output .= 	$myplugins->as_csv();
+			$output .= PHP_EOL;
 		}
-
-		//file_put( );
-
-
-
+		file_put_contents( $this->filename, $output);
 	}
 
 
