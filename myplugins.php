@@ -1,4 +1,4 @@
-<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019, 2020
+<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019, 2020, 2021
 
 /**
  * Syntax: oikwp myplugins.php [pluginlist]
@@ -19,7 +19,7 @@ require_once( ABSPATH . "wp-admin/includes/plugin-install.php" );
 oik_require( "libs/bobbfunc.php" );
 oik_require( "includes/oik-remote.inc" );
 
-oik_require( "class-wp-org-downloads.php", "wp-top12" );
+oik_require( "libs/class-wp-org-downloads.php", "wp-top12" );
 
 $wpod = new WP_org_downloads();
 
@@ -48,7 +48,7 @@ function query_my_plugin_list() {
 	$plugins = oik_batch_query_value_from_argv( 1, null ); 
 	if ( !$plugins ) {
 		$plugins = "oik,oik-nivo-slider,oik-privacy-policy,cookie-cat,bbboing,uk-tides,oik-css,";
-		$plugins .= "oik-batchmove,oik-read-more,oik-weightcountry-shipping,oik-bwtrace,allow-reinstalls,oik-weight-zone-shipping,sb-children-block";
+		$plugins .= "oik-batchmove,oik-read-more,oik-weightcountry-shipping,oik-bwtrace,allow-reinstalls,oik-weight-zone-shipping,sb-children-block,sb-chart-block";
 	}
 	$plugins_array = bw_as_array( $plugins );
 	return( $plugins_array );
@@ -106,7 +106,7 @@ function dummy_query_my_plugins() {
 	$count_array[ 'allow-reinstalls' ]=1579;
 	$count_array[ 'oik-weight-zone-shipping' ]=9976;
 	$count_array[ 'sb-children-block' ]=107;
-
+	$count_array[ 'sb-chart-block' ]=11;
 	return $count_array;
 }
 
