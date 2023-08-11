@@ -1,4 +1,4 @@
-<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019, 2020, 2021
+<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019, 2020, 2021, 2023
 
 /**
  * Syntax: oikwp myplugins.php [pluginlist]
@@ -25,6 +25,8 @@ $wpod = new WP_org_downloads();
 
 $plugins_array = query_my_plugin_list(); 																		 
 $count_array = query_my_plugins( $wpod, $plugins_array );
+//print_r( $count_array );
+echo "Total:" . array_sum( $count_array ), PHP_EOL;
 
 $line = count_array_to_csv( $count_array );
 //prepend_csv( 'myplugins.csv', $line);
@@ -168,8 +170,3 @@ function get_heading() {
 	$line .= PHP_EOL;
 	return $line;
 }
-
-
-
-
-
