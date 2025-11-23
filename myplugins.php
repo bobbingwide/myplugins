@@ -1,4 +1,4 @@
-<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019, 2020, 2021, 2023
+<?php // (C) Copyright Bobbing Wide 2015, 2016, 2019, 2020, 2021, 2023, 2024
 
 /**
  * Syntax: oikwp myplugins.php [pluginlist]
@@ -50,7 +50,8 @@ function query_my_plugin_list() {
 	$plugins = oik_batch_query_value_from_argv( 1, null ); 
 	if ( !$plugins ) {
 		$plugins = "oik,oik-nivo-slider,oik-privacy-policy,cookie-cat,bbboing,uk-tides,oik-css,";
-		$plugins .= "oik-batchmove,oik-read-more,oik-weightcountry-shipping,oik-bwtrace,allow-reinstalls,oik-weight-zone-shipping,sb-children-block,sb-chart-block";
+		$plugins .= "oik-batchmove,oik-read-more,oik-weightcountry-shipping,oik-bwtrace,allow-reinstalls,oik-weight-zone-shipping,";
+		$plugins .= "sb-children-block,sb-chart-block,field-block-for-acf-pro";
 	}
 	$plugins_array = bw_as_array( $plugins );
 	return( $plugins_array );
